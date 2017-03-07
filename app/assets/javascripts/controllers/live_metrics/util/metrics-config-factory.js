@@ -30,10 +30,16 @@ angular.module('miq.util').factory('metricsConfigFactory', function() {
     };
 
     dash.timeRanges = [
-      {title: _("Hours"), value: 1},
-      {title: _("Days"), value: 24},
-      {title: _("Weeks"), value: 168},
-      {title: _("Months"), value: 672}
+      {title: __("Hours"), value: 1},
+      {title: __("Days"), value: 24},
+      {title: __("Weeks"), value: 168},
+      {title: __("Months"), value: 672}
+    ];
+
+    dash.timeIntervals = [
+      {title: __("Min interval 5 Secondes"), value: 5},
+      {title: __("Min interval 5 Minutes"), value: 5 * 60},
+      {title: __("Min interval 20 Minutes"), value: 20 * 60}
     ];
 
     dash.dateOptions = {
