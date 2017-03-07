@@ -112,7 +112,11 @@ class ContainerDashboardService
   end
 
   def realtime_heatmaps
-    heatmaps_data(realtime_provider_metrics)
+    node_ids = @ems.container_nodes if @ems.present?
+    metrics = latest_metrics(ContainerNode.name, node_ids)
+    metrics = metrics.where('timestamp > ?', 10.minutes.ago.utc).includes(:resource)
+    metrics = metrics.includes(:resource => [:ext_management_system]) unless @ems.present?
+    heatmaps_data(metrics)
   end
 
   def hourly_heatmaps
@@ -385,6 +389,13 @@ class ContainerDashboardService
         :yData => trend.values.map(&:round)
       }
     end
+  end
+
+  def latest_metrics(resource_type, resource_ids = nil)
+    metrics = Metric.where(:resource_type => resource_type)
+    metrics = metrics.where(:resource_id => resource_ids) if resource_ids
+    metrics = metrics.order(:resource_id, :timestamp => :desc)
+    metrics.select('DISTINCT ON (metrics.resource_id) metrics.*')
   end
 
   def realtime_provider_metrics
