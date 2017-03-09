@@ -74,7 +74,7 @@ angular.module('miq.util').factory('metricsHttpFactory', function() {
     var getTenants = function(include) {
       return $http.get(dash.url + "&query=get_tenants&limit=7&include=" + include).then(function(response) {
         if (utils.checkResponse(response) === false) {
-          return;
+          return [];
         }
 
         return response.data.tenants;
